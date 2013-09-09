@@ -18,7 +18,8 @@ while ($(tile).outerHeight() > $(tile).height()) {
  } 
  */
 
-$(function() {
+$(function() {	
+	
 	var cols = document.querySelectorAll('li.task span.tiles');
 	[].forEach.call(cols, function(col) {
 		//col.addEventListener('touchstart', handleDragStart, false);
@@ -95,8 +96,8 @@ $(function() {
 	})
 });
 
-var cols = document.querySelectorAll('li.tiles');
-[].forEach.call(cols, function(col) {
-	//col.addEventListener('touchstart', handleDragStart, false);
-	//col.addEventListener('touchend', handleDragEnd, false);
-});
+//var cols = document.querySelectorAll('li.tiles');
+//[].forEach.call(cols, function(col) {
+//	//col.addEventListener('touchstart', handleDragStart, false);
+//	//col.addEventListener('touchend', handleDragEnd, false);
+//});
