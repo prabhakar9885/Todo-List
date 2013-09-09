@@ -1,0 +1,57 @@
+
+
+[draggable] {
+  -webkit-user-select: none; 
+}
+
+html
+{
+	max-width: 320px;
+	position: fixed !important;
+	position: absolute;
+}
+
+
+/*
+ *  Style for the tiles
+ */
+
+ul
+{
+  list-style-type: none;
+  padding: 5px;
+  position: relative;
+}
+
+ul > li.task 
+{
+  width: 250px;
+  height: 55px;
+  box-shadow: 5px 5px 8px gray;
+  border-bottom-left-radius: 13px;
+  border-top-right-radius: 13px;
+  background: Yellow;
+  padding: 15px;
+  font-size: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 10px;
+  cursor: move;
+  left: 0px;
+}
+
+ul > li.task > span.tiles > div.Name
+{
+  color: Blue;
+  padding-bottom: 5px;
+}
+
+ul > li.task > span.tiles > div.Description
+{
+  color:Green;
+  font-size: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

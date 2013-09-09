@@ -1,0 +1,25 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href=".Styles/Todo.css" />
+<script type="text/javascript" src="../Scripts/jquery-1.8.js"></script>
+<script type="text/javascript" src="../Scripts/jquery.wipetouch.js"></script>
+<script type="text/javascript" src="../Scripts/Todo.js"></script>
+</head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<body>
+	<ul>
+		<li class="tiles">
+			<div class="Name">Task 1</div>
+			<div class="Description">This is the description of Task 1 and
+				its overflowing.</div>
+		</li>
+		<li class="tiles">
+			<div class="Name">Task 2</div>
+			<div class="Description">This is the description of Task 2 and
+				its overflowing.</div>
+		</li>
+	</ul>
+</body>
+
+</html>
