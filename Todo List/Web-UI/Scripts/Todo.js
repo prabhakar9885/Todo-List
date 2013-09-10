@@ -1,3 +1,7 @@
+
+/**
+ * Code used for putting the task-description, into a single line.
+ */
 var tile = $('.tiles');
 while ($(tile).outerHeight() > $(tile).height()) {
 	$(tile).text(function(index, text) {
@@ -19,7 +23,9 @@ while ($(tile).outerHeight() > $(tile).height()) {
  */
 
 $(function() {	
-	
+	/**
+	 * Code used for binding the task list, to the swiping(left, right) gestures.
+	 */
 	var cols = document.querySelectorAll('li.task span.tiles');
 	[].forEach.call(cols, function(col) {
 		//col.addEventListener('touchstart', handleDragStart, false);
