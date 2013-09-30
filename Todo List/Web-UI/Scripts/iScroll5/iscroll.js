@@ -1591,6 +1591,7 @@ Indicator.prototype = {
 	},
 
 	_end: function (e) {
+		debugger;
 		if ( !this.initiated ) {
 			return;
 		}

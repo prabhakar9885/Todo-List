@@ -3,7 +3,8 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 
 <title>iScroll demo: bounce easing</title>
 <link rel="stylesheet" type="text/css" href="../Styles/Demo.css" />
@@ -15,85 +16,106 @@
 <script type="text/javascript" src="../Scripts/Todo.js"></script>
 
 <script type="text/javascript">
+	var myScroll;
 
-var myScroll;
-
-function loaded () {
-	myScroll = new IScroll('#wrapper', { bounceEasing: 'elastic', bounceTime: 1200 });
-}
-
-document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+	function loaded() {
+		myScroll = new IScroll('#wrapper', {
+			bounceEasing : 'elastic',
+			bounceTime : 1200
+		});
+		/* myScroll.options.onBeforeScrollEnd = function(){
+				alert("as");
+				// Code for adding a task-li that appears in the top.
+			} */
+		
+		positionOfFirstTile = $("#scroller").offset().top;
+		
+		myScroll.on('scrollStart', function() {
+			positionOfFirstTile = $("#scroller").offset().top;
+			$('#wrapper').on('vmouseup', function(e) {
+				alert("Touch Start.");
+				e.preventDefault();
+			}, false);
+		} );
+		myScroll.on('scrollEnd', function() {
+			debugger;
+			if( $("#scroller").offset().top == 61 && positionOfFirstTile == 61 ){
+				$('#wrapper').trigger('vmouseup');
+				$('#wrapper').off('vmouseup');
+				
+				/**
+				 * Code for the text-box, to enter the Task-name and the description.
+				 */
+				alert("Touch End.");
+			}
+		});
+	}
 
 </script>
 
 </head>
 <body onload="loaded()">
-<div id="header">iScroll</div>
+	<div id="header">iScroll</div>
 
-<div id="wrapper">
-	<div id="scroller">
-		<ul>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task 1</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task A</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task A</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task A</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task A</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task A</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task A</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task A</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task A</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			<li class="task"><span class="tiles">
-					<div class="Name">Task A</div>
-					<div class="Description">This is the description of Task 1
-						and its overflowing.</div>
-			</span></li>
-			
-			<li>Pretty row 2</li>
-			<li>Pretty row 3</li>
-			<li>Pretty row 4</li>
-			<li>Pretty row 5</li>
-			
-		</ul>
+	<div id="wrapper">
+		<div id="scroller">
+			<ul>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task 1</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task A</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task A</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task A</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task A</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task A</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task A</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task A</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task A</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+				<li class="task"><span class="tiles">
+						<div class="Name">Task A</div>
+						<div class="Description">This is the description of Task 1
+							and its overflowing.</div>
+				</span></li>
+
+			</ul>
+		</div>
 	</div>
-</div>
 
-<div id="footer"></div>
+	<!-- <div id="footer"></div> -->
 
 </body>
 </html>
