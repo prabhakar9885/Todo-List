@@ -8,13 +8,20 @@
 
 <title>iScroll demo: bounce easing</title>
 <link rel="stylesheet" type="text/css" href="../Styles/Demo.css" />
+<link rel="stylesheet" type="text/css" href="../Styles/animate.css" />
 <!-- <link rel="stylesheet" type="text/css" href="../Styles/Todo.css" /> -->
 <script type="text/javascript" src="../Scripts/jquery-1.8.js"></script>
 <script type="text/javascript" src="../Scripts/jquery.transit.js"></script>
 <script type="text/javascript" src="../Scripts/jquery.wipetouch.js"></script>
 <script type="text/javascript" src="../Scripts/iScroll5/iscroll.js"></script>
 <script type="text/javascript" src="../Scripts/Todo.js"></script>
-
+<style type="text/css">
+li.added {
+	-vendor-animation-duration: 3s;
+	-vendor-animation-delay: 2s;
+	-vendor-animation-iteration-count: infinite;
+}
+</style>
 <script type="text/javascript">
 	var myScroll;
 
@@ -31,6 +38,7 @@
 		positionOfFirstTile = $("#scroller").offset().top;
 		
 		myScroll.on('scrollStart', function() {
+			debugger;
 			positionOfFirstTile = $("#scroller").offset().top;
 			$('#wrapper').on('vmouseup', function(e) {
 				alert("Touch Start.");
@@ -46,7 +54,16 @@
 				/**
 				 * Code for the text-box, to enter the Task-name and the description.
 				 */
-				alert("Touch End.");
+				var newTakHTML = '<li class="task added"><span class="tiles">'+
+											'<div class="Name">New Task</div>'+
+											'<div class="Description">Description</div>'+
+									'</span></li>';
+				$("div#scroller ul").prepend(newTakHTML);
+// 				$('div#scroller ul li["class!=added"]').transition({ y: '40px' });
+				$('div#scroller ul li.added').addClass('animated bounceIn');
+				$('div#scroller ul li.added').removeClass('added');
+				myScroll.refresh();
+				//alert("Touch End.");
 			}
 		});
 	}
@@ -55,7 +72,7 @@
 
 </head>
 <body onload="loaded()">
-	<div id="header">iScroll</div>
+	<div id="header">Todo List</div>
 
 	<div id="wrapper">
 		<div id="scroller">
