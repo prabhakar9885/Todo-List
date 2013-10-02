@@ -423,7 +423,10 @@ IScroll.prototype = {
 		if ( timestamp - this.endTime > 300 && (absDistX < 10 && absDistY < 10) ) {
 			return;
 		}
-
+		
+		// Make the scrolled vertical distance available to the other JS files, globally.
+		window.verticalSlideDist = absDistY;
+		
 		// If you are scrolling in one direction lock the other
 		if ( !this.directionLocked && !this.options.freeScroll ) {
 			if ( absDistX > absDistY + this.options.directionLockThreshold ) {

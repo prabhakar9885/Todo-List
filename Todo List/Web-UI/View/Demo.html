@@ -24,6 +24,8 @@ li.added {
 </style>
 <script type="text/javascript">
 	var myScroll;
+	
+	window.verticalSwipeDist  = 0;
 
 	function loaded() {
 		myScroll = new IScroll('#wrapper', {
@@ -50,6 +52,10 @@ li.added {
 			if( $("#scroller").offset().top == 61 && positionOfFirstTile == 61 ){
 				$('#wrapper').trigger('vmouseup');
 				$('#wrapper').off('vmouseup');
+
+				//If the vertically scrolled distance is <200px, don't render the Tile for the new task. 
+				if(window.verticalSlideDist  < 200)
+					return;
 				
 				/**
 				 * Code for the text-box, to enter the Task-name and the description.
@@ -58,7 +64,66 @@ li.added {
 											'<div class="Name">New Task</div>'+
 											'<div class="Description">Description</div>'+
 									'</span></li>';
+				
+				// Add a new tile to the List, and bind an event listener for the slide-to-delete event.
 				$("div#scroller ul").prepend(newTakHTML);
+				$("div#scroller ul li:first").wipetouch(
+						{
+							wipeLeft : function(result) {
+								console.log("LEFT");
+								var deletedTaskLi = $(result.source).parent().parent();
+								debugger;
+								deletedTaskLi.transit(  {
+															marginLeft : 0,
+															opacity: 1.00
+														},
+														"slow",
+														function(){
+															console.log("Swiped Left")
+															//alert("Right")
+														}
+													);
+								//console.log(result.x + " , " + result.y + " : " + result.speed);
+							},
+							wipeRight : function(result) {
+								console.log("RIGHT");
+								var takLi = $(result.source).parent().parent();
+								debugger;
+								takLi.transit({
+													marginLeft : takLi.outerWidth() + 20,
+													opacity: 0.25
+												},
+												"slow",
+												function(){
+													console.log("Swiped Right")
+													//alert("Left")
+												})
+											.transit(
+														{
+															height: 0,
+															padding: 0,
+															margin: 0	//Reason for geany effect.
+														},
+														"slow",
+														function() {
+															debugger;
+															var nextTask = takLi.next();
+															nextTask.transit({ top: 0}, "fast");
+															//takLi.remove();
+														}
+													);
+								//console.log(result.x + " , " + result.y + " : " + result.speed);
+							},
+							wipeUp : function(result) {
+								console.log("UP");
+								console.log(result.x + " , " + result.y + " : "
+										+ result.speed);
+							},
+							wipeDown : function(result) {
+							},
+							wipeMove : function(result) {
+							}
+						});
 // 				$('div#scroller ul li["class!=added"]').transition({ y: '40px' });
 				$('div#scroller ul li.added').addClass('animated bounceIn');
 				$('div#scroller ul li.added').removeClass('added');
