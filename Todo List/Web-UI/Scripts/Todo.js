@@ -100,6 +100,14 @@ $(function() {
 					}
 				});
 	})
+	
+	$('li.task').dblclick(function(){
+		console.log("dblClick");
+		$(this).addClass('animated tada');
+		setTimeout( function(){
+			$('li.task').removeClass('animated tada');
+		}, 1000);
+	})
 });
 
 //var cols = document.querySelectorAll('li.tiles');
