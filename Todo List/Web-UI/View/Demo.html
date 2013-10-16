@@ -45,7 +45,7 @@ li.added {
 		positionOfFirstTile = $("#scroller").offset().top;
 		
 		myScroll.on('scrollStart', function() {
-			debugger;
+// 			debugger;
 			positionOfFirstTile = $("#scroller").offset().top;
 			$('#wrapper').on('vmouseup', function(e) {
 				alert("Touch Start.");
@@ -53,8 +53,8 @@ li.added {
 			}, false);
 		} );
 		myScroll.on('scrollEnd', function() {
-			debugger;
-			if( $("#scroller").offset().top == 61 && positionOfFirstTile == 61 ){
+// 			debugger;
+			if( $("#scroller").offset().top == 71 && positionOfFirstTile == 71 ){
 				$('#wrapper').trigger('vmouseup');
 				$('#wrapper').off('vmouseup');
 
@@ -85,6 +85,13 @@ li.added {
 							wipeLeft : function(result) {
 								console.log("LEFT");
 								var deletedTaskLi = $(result.source).parent().parent();
+								
+								if($(result.source).hasClass("tiles"))
+									deletedTaskLi = $(result.source).parent();
+								else if($(result.source).hasClass("task"))
+									deletedTaskLi = $(result.source);
+								
+								debugger;
 								debugger;
 								deletedTaskLi.transit(  {
 															marginLeft : 0,
@@ -101,6 +108,11 @@ li.added {
 							wipeRight : function(result) {
 								console.log("RIGHT");
 								var takLi = $(result.source).parent().parent();
+								if($(result.source).hasClass("tiles"))
+									takLi = $(result.source).parent();
+								else if($(result.source).hasClass("task"))
+									takLi = $(result.source);
+								debugger;
 								debugger;
 								takLi.transit({
 													marginLeft : takLi.outerWidth() + 20,

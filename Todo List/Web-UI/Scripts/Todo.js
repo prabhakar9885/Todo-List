@@ -51,6 +51,10 @@ $(function() {
 					wipeRight : function(result) {
 						console.log("RIGHT");
 						var takLi = $(result.source).parent().parent();
+						if($(result.source).hasClass("tiles"))
+							takLi = $(result.source).parent();
+						else if($(result.source).hasClass("task"))
+							takLi = $(result.source);
 						debugger;
 						takLi.transit({
 											marginLeft : takLi.outerWidth() + 20,
@@ -72,7 +76,7 @@ $(function() {
 													debugger;
 													var nextTask = takLi.next();
 													nextTask.transit({ top: 0}, "fast");
-													//takLi.remove();
+													takLi.remove();
 												}
 											);
 						//console.log(result.x + " , " + result.y + " : " + result.speed);
