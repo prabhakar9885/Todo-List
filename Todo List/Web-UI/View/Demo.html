@@ -72,6 +72,14 @@ li.added {
 				
 				// Add a new tile to the List, and bind an event listener for the slide-to-delete event.
 				$("div#scroller ul").prepend(newTakHTML);
+				$('li.task:first').dblclick(function(){
+					console.log("dblClick");
+					$(this).removeClass('animated bounceIn');
+					$(this).addClass('animated tada');
+					setTimeout( function(){
+						$('li.task').removeClass('animated tada');
+					}, 1000);
+				})
 				$("div#scroller ul li:first").wipetouch(
 						{
 							wipeLeft : function(result) {
@@ -193,7 +201,7 @@ li.added {
 							and its overflowing.</div>
 				</span></li>
 				<li class="task"><span class="tiles">
-						<div class="Name">Task A</div>
+						<div class="Name"><a href="#z" data-rel="popup">nnnn</a>Task A</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
@@ -201,7 +209,11 @@ li.added {
 			</ul>
 		</div>
 	</div>
-
+	<div data-role="popup" id="#z">
+		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+		...popup contents go here...
+	</div>
+	
 	<!-- <div id="footer"></div> -->
 
 </body>

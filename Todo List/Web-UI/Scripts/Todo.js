@@ -104,6 +104,25 @@ $(function() {
 	$('li.task').dblclick(function(){
 		console.log("dblClick");
 		$(this).addClass('animated tada');
+		$(this).find('.Description').attr('height','400px');
+		$(this).addClass('animated tada');
+		$('li.task').magnificPopup({
+			type: 'inline',
+			preloader: false,
+			focus: '#name',
+
+			// When elemened is focused, some mobile browsers in some cases zoom in
+			// It looks not nice, so we disable it:
+			callbacks: {
+				beforeOpen: function() {
+					if($(window).width() < 700) {
+						this.st.focus = false;
+					} else {
+						this.st.focus = '#name';
+					}
+				}
+			}
+		});
 		setTimeout( function(){
 			$('li.task').removeClass('animated tada');
 		}, 1000);
