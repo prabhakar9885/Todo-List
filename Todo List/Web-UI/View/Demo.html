@@ -9,12 +9,16 @@
 <title>iScroll demo: bounce easing</title>
 <link rel="stylesheet" type="text/css" href="../Styles/Demo.css" />
 <link rel="stylesheet" type="text/css" href="../Styles/animate.css" />
+<link rel="stylesheet" type="text/css"
+	href="../Syyles/magnific-popup.css" />
 <!-- <link rel="stylesheet" type="text/css" href="../Styles/Todo.css" /> -->
 <script type="text/javascript" src="../Scripts/jquery-1.8.js"></script>
 <script type="text/javascript" src="../Scripts/jquery.transit.js"></script>
 <script type="text/javascript" src="../Scripts/jquery.wipetouch.js"></script>
 <script type="text/javascript" src="../Scripts/iScroll5/iscroll.js"></script>
 <script type="text/javascript" src="../Scripts/Todo.js"></script>
+<script type="text/javascript"
+	src="../Scripts/Magnific-popup/jquery.magnific-popup.js"></script>
 <style type="text/css">
 /* li { */
 /* 	-vendor-animation-duration: 3s; */
@@ -29,8 +33,20 @@ li.added {
 </style>
 <script type="text/javascript">
 	var myScroll;
+
+	$(function(){
+
+		$('ul li.task span.tiles div.Name, ul li.task span.tiles div.Description').magnificPopup({
+		  type:'inline',
+		  removalDelay: 500,
+		  midClick: true,
+		  mainClass: 'mfp-zoom-in'
+		});
+
+	});
 	
-	window.verticalSwipeDist  = 0;
+	
+	window.verticalSwipeDist = 0;
 
 	function loaded() {
 		myScroll = new IScroll('#wrapper', {
@@ -41,123 +57,167 @@ li.added {
 				alert("as");
 				// Code for adding a task-li that appears in the top.
 			} */
-		
+
 		positionOfFirstTile = $("#scroller").offset().top;
-		
+
 		myScroll.on('scrollStart', function() {
-// 			debugger;
+			// 			debugger;
 			positionOfFirstTile = $("#scroller").offset().top;
 			$('#wrapper').on('vmouseup', function(e) {
 				alert("Touch Start.");
 				e.preventDefault();
 			}, false);
-		} );
-		myScroll.on('scrollEnd', function() {
-// 			debugger;
-			if( $("#scroller").offset().top == 71 && positionOfFirstTile == 71 ){
-				$('#wrapper').trigger('vmouseup');
-				$('#wrapper').off('vmouseup');
+		});
+		myScroll
+				.on(
+						'scrollEnd',
+						function() {
+							// 			debugger;
+							if ($("#scroller").offset().top == 71
+									&& positionOfFirstTile == 71) {
+								$('#wrapper').trigger('vmouseup');
+								$('#wrapper').off('vmouseup');
 
-				//If the vertically scrolled distance is <200px, don't render the Tile for the new task. 
-				if(window.verticalSlideDist  < 200)
-					return;
-				
-				/**
-				 * Code for the text-box, to enter the Task-name and the description.
-				 */
-				var newTakHTML = '<li class="task added"><span class="tiles">'+
-											'<div class="Name">New Task</div>'+
-											'<div class="Description">Description</div>'+
-									'</span></li>';
-				
-				// Add a new tile to the List, and bind an event listener for the slide-to-delete event.
-				$("div#scroller ul").prepend(newTakHTML);
-				$('li.task:first').dblclick(function(){
-					console.log("dblClick");
-					$(this).removeClass('animated bounceIn');
-					$(this).addClass('animated tada');
-					setTimeout( function(){
-						$('li.task').removeClass('animated tada');
-					}, 1000);
-				})
-				$("div#scroller ul li:first").wipetouch(
-						{
-							wipeLeft : function(result) {
-								console.log("LEFT");
-								var deletedTaskLi = $(result.source).parent().parent();
-								
-								if($(result.source).hasClass("tiles"))
-									deletedTaskLi = $(result.source).parent();
-								else if($(result.source).hasClass("task"))
-									deletedTaskLi = $(result.source);
-								
-								debugger;
-								debugger;
-								deletedTaskLi.transit(  {
-															marginLeft : 0,
-															opacity: 1.00
-														},
-														"slow",
-														function(){
-															console.log("Swiped Left")
-															//alert("Right")
-														}
-													);
-								//console.log(result.x + " , " + result.y + " : " + result.speed);
-							},
-							wipeRight : function(result) {
-								console.log("RIGHT");
-								var takLi = $(result.source).parent().parent();
-								if($(result.source).hasClass("tiles"))
-									takLi = $(result.source).parent();
-								else if($(result.source).hasClass("task"))
-									takLi = $(result.source);
-								debugger;
-								debugger;
-								takLi.transit({
-													marginLeft : takLi.outerWidth() + 20,
-													opacity: 0.25
-												},
-												"slow",
-												function(){
-													console.log("Swiped Right")
-													//alert("Left")
-												})
-											.transit(
-														{
-															height: 0,
-															padding: 0,
-															margin: 0	//Reason for geany effect.
-														},
-														"slow",
-														function() {
-															debugger;
-															var nextTask = takLi.next();
-															nextTask.transit({ top: 0}, "fast");
-															//takLi.remove();
-														}
-													);
-								//console.log(result.x + " , " + result.y + " : " + result.speed);
-							},
-							wipeUp : function(result) {
-								console.log("UP");
-								console.log(result.x + " , " + result.y + " : "
-										+ result.speed);
-							},
-							wipeDown : function(result) {
-							},
-							wipeMove : function(result) {
+								//If the vertically scrolled distance is <200px, don't render the Tile for the new task. 
+								if (window.verticalSlideDist < 200)
+									return;
+
+								/**
+								 * Code for the text-box, to enter the Task-name and the description.
+								 */
+								var newTakHTML = '<li class="task added"><span class="tiles">'
+										+ '<div class="Name">New Task</div>'
+										+ '<div class="Description">Description</div>'
+										+ '</span></li>';
+
+								// Add a new tile to the List, and bind an event listener for the slide-to-delete event.
+								$("div#scroller ul").prepend(newTakHTML);
+								$('li.task:first').dblclick(
+										function() {
+											console.log("dblClick");
+											$(this).removeClass(
+													'animated bounceIn');
+											$(this).addClass('animated tada');
+											setTimeout(function() {
+												$('li.task').removeClass(
+														'animated tada');
+											}, 1000);
+										})
+								$("div#scroller ul li:first")
+										.wipetouch(
+												{
+													wipeLeft : function(result) {
+														console.log("LEFT");
+														var deletedTaskLi = $(
+																result.source)
+																.parent()
+																.parent();
+
+														if ($(result.source)
+																.hasClass(
+																		"tiles"))
+															deletedTaskLi = $(
+																	result.source)
+																	.parent();
+														else if ($(
+																result.source)
+																.hasClass(
+																		"task"))
+															deletedTaskLi = $(result.source);
+
+														debugger;
+														debugger;
+														deletedTaskLi
+																.transit(
+																		{
+																			marginLeft : 0,
+																			opacity : 1.00
+																		},
+																		"slow",
+																		function() {
+																			console
+																					.log("Swiped Left")
+																			//alert("Right")
+																		});
+														//console.log(result.x + " , " + result.y + " : " + result.speed);
+													},
+													wipeRight : function(result) {
+														console.log("RIGHT");
+														var takLi = $(
+																result.source)
+																.parent()
+																.parent();
+														if ($(result.source)
+																.hasClass(
+																		"tiles"))
+															takLi = $(
+																	result.source)
+																	.parent();
+														else if ($(
+																result.source)
+																.hasClass(
+																		"task"))
+															takLi = $(result.source);
+														debugger;
+														debugger;
+														takLi
+																.transit(
+																		{
+																			marginLeft : takLi
+																					.outerWidth() + 20,
+																			opacity : 0.25
+																		},
+																		"slow",
+																		function() {
+																			console
+																					.log("Swiped Right")
+																			//alert("Left")
+																		})
+																.transit(
+																		{
+																			height : 0,
+																			padding : 0,
+																			margin : 0
+																		//Reason for geany effect.
+																		},
+																		"slow",
+																		function() {
+																			debugger;
+																			var nextTask = takLi
+																					.next();
+																			nextTask
+																					.transit(
+																							{
+																								top : 0
+																							},
+																							"fast");
+																			//takLi.remove();
+																		});
+														//console.log(result.x + " , " + result.y + " : " + result.speed);
+													},
+													wipeUp : function(result) {
+														console.log("UP");
+														console.log(result.x
+																+ " , "
+																+ result.y
+																+ " : "
+																+ result.speed);
+													},
+													wipeDown : function(result) {
+													},
+													wipeMove : function(result) {
+													}
+												});
+								// 				$('div#scroller ul li["class!=added"]').transition({ y: '40px' });
+								$('div#scroller ul li.added').addClass(
+										'animated bounceIn');
+								$('div#scroller ul li.added').removeClass(
+										'added');
+								myScroll.refresh();
+								//alert("Touch End.");
 							}
 						});
-// 				$('div#scroller ul li["class!=added"]').transition({ y: '40px' });
-				$('div#scroller ul li.added').addClass('animated bounceIn');
-				$('div#scroller ul li.added').removeClass('added');
-				myScroll.refresh();
-				//alert("Touch End.");
-			}
-		});
 	}
-
 </script>
 
 </head>
@@ -167,53 +227,55 @@ li.added {
 	<div id="wrapper">
 		<div id="scroller">
 			<ul>
-				<li class="task"><span class="tiles">
+				<li class="task"><span class="tiles" TaskId='0'>
 						<div class="Name">Task 1</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
-				<li class="task"><span class="tiles">
+				<li class="task"><span class="tiles" TaskId='1'>
 						<div class="Name">Task A</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
-				<li class="task"><span class="tiles">
+				<li class="task"><span class="tiles" TaskId='2'>
 						<div class="Name">Task A</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
-				<li class="task"><span class="tiles">
+				<li class="task"><span class="tiles" TaskId='3'>
 						<div class="Name">Task A</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
-				<li class="task"><span class="tiles">
+				<li class="task"><span class="tiles" TaskId='4'>
 						<div class="Name">Task A</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
-				<li class="task"><span class="tiles">
+				<li class="task"><span class="tiles" TaskId='5'>
 						<div class="Name">Task A</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
-				<li class="task"><span class="tiles">
+				<li class="task"><span class="tiles" TaskId='6'>
 						<div class="Name">Task A</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
-				<li class="task"><span class="tiles">
+				<li class="task"><span class="tiles" TaskId='7'>
 						<div class="Name">Task A</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
-				<li class="task"><span class="tiles">
+				<li class="task"><span class="tiles" TaskId='8'>
 						<div class="Name">Task A</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
-				<li class="task"><span class="tiles">
-						<div class="Name"><a href="#z" data-rel="popup">nnnn</a>Task A</div>
+				<li class="task"><span class="tiles" TaskId='9'>
+						<div class="Name">
+							<a href="#test-popup" data-rel="popup">nnnn</a>Task A
+						</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
@@ -221,11 +283,52 @@ li.added {
 			</ul>
 		</div>
 	</div>
-	<div data-role="popup" id="#z">
-		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-		...popup contents go here...
+	<script type="text/javascript">
+	$(function(){
+		function preventPropogation(e){
+			e.stopPropagation();
+			e.preventDefault();
+		}
+		$('#test-popup textArea#Description, #test-popup input#Name').on('click', preventPropogation);
+		
+		/* Update the List view, hide the Edit-task view and display the List*/
+		$('#Ok').on('click', function(){
+			$('#wrapper').css('display', 'block');
+			$('#test-popup').css('display', 'none');
+			
+			var taskInTheList = "span[TaskId^='"+ $("#test-popup input#TaskId").val() +"']";
+			debugger;
+			$(taskInTheList).find(".Name").html($("#test-popup input#Name").val());
+			$(taskInTheList).find(".Description").html($("#test-popup textArea#Description").val());
+			
+			/* Animating the updated task, in the List View */
+			$(taskInTheList).parent().addClass('animated tada');
+			$(taskInTheList).parent().find('.Description').attr('height','400px');
+			$(taskInTheList).parent().addClass('animated tada');
+			
+			/* Removing the Animation-CSS from the updated task, in the List View */
+			setTimeout( function(){
+				$('li.task').removeClass('animated tada');
+			}, 1000);
+		})
+		
+		$('#Cancel').on( 'click', function(e){
+			debugger;
+			$('#wrapper').css('display', 'block');
+			$('#test-popup').css('display', 'none');
+		});
+	})
+	</script>
+	<div id="test-popup" class="white-popup mfp-with-anim mfp-hide task" style="display: none;">
+		<input type="text" value="Name" id="Name" style="width: 80%"/><br>
+		<textarea rows="5" cols="" value="Description..." id="Description" style="width: 80%"></textarea><br>
+		<input type="hidden" id='TaskId' value="">
+		<button id='Ok'>Ok</button>
+		<button id='Cancel'>Cancel</button>
 	</div>
-	
+
+
+
 	<!-- <div id="footer"></div> -->
 
 </body>
