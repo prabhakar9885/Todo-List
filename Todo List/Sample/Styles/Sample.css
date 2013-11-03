@@ -12,6 +12,9 @@
 		margin: 5%;
 		border: 0;
 	}
+	#scroller ul{
+		width: 90%;
+	}
 	body {
 		font-size: 12px;
 		font-family: ubuntu, helvetica, arial;
@@ -124,7 +127,8 @@
 	ul>li.task>span.tiles {
 		position: absolute;
 		padding: 10px;
-		width: 80%;
+		width: 85%;
+		height: 65px;
 	}
 	ul>li.task>span.tiles>div.Name {
 		color: Blue;

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">      
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <title>Foo</title>
+        <link rel="stylesheet" href="./jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" type="text/css" href="Styles/Sample.css">
+        <link rel="stylesheet" type="text/css" href="Styles/animate.css" />
+        <link rel="stylesheet" type="text/css" href="./magnific-popup.css" />
+
+        <style type="text/css">
+            li.added {
+                -vendor-animation-duration: 3s;
+                -vendor-animation-delay: 2s;
+                -vendor-animation-iteration-count: infinite;
+            }
+        </style>
+
+        <script src="./jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="./jquery.transit.js"></script>
+        <script src="./jquery.mobile-1.2.0.min.js"></script>
+        <script src="./iscroll56.js"></script>
+        <script src="./DBLogic.js"></script>
+        <script type="text/javascript">
+
+            var iScroller;
+
+        	function OpenTaskForEdit(e) {
+                /*if( window.verticalSlideDist >5){
+                    window.verticalSlideDist = 0;
+                    return;
+                }*/
+                debugger;
+                $('#wrapper').css('display', 'none');
+                $('#test-popup').css('display', 'block');
+                console.log($(this).find('.Name').html().trim());
+                console.log($(this).find('.Description').html().trim());
+                console.log( $(this).find('span').attr('TaskId'));
+                debugger;
+                $('#test-popup textArea#Description').val( $(this).find('.Description').html().trim() );
+                $('#test-popup input#Name').val( $(this).find('.Name').html().trim() );
+                debugger;
+                $('#test-popup #TaskId').val( $(this).find('span').attr('TaskId'));
+                var dateTime = new Date($(this).find('.taskTime').html().trim())
+                var date =  dateTime.getFullYear() +"-"+
+                            ((dateTime.getMonth() + 1)<10? ('0'+(dateTime.getMonth() + 1)): (dateTime.getMonth() + 1) )+"-"+
+                            ((dateTime.getDate() < 10 )? ('0'+dateTime.getDate()) : dateTime.getDate());
+                var time = ((dateTime.getHours()<10)?('0'+dateTime.getHours()): dateTime.getHours() )+":"+
+                           ((dateTime.getMinutes()<10)?('0'+dateTime.getMinutes()): dateTime.getMinutes() )+":"+
+                           ((dateTime.getSeconds()<10)?('0'+dateTime.getSeconds()): dateTime.getSeconds() );
+            }
+
+        	$.event.special.swipe.handleSwipe = function( start, stop ) {
+				if ( stop.time - start.time < $.event.special.swipe.durationThreshold &&
+			    Math.abs( start.coords[ 0 ] - stop.coords[ 0 ] ) > $.event.special.swipe.horizontalDistanceThreshold &&
+			    Math.abs( start.coords[ 1 ] - stop.coords[ 1 ] ) < $.event.special.swipe.verticalDistanceThreshold ) {
+			 
+			    start.origin.trigger( "swipe" )
+			      .trigger( start.coords[0] > stop.coords[ 0 ] ? "swipeleft" : "swiperight" );
+			  }
+			}
+
+            window.verticalSlideDist = 0;
+
+
+            function SwipedRight (e) {
+                var taskLi = $(e.target).parent().parent();
+                if (e.target.className == "tiles")
+                    taskLi = $(e.target).parent();
+                else if (e.target.className == "Name" || e.target.className == "Description")
+                    taskLi = $(e.target).parent().parent();
+                debugger;
+                
+                // $(taskLi).css("background-color", 'Green')
+                
+                taskLi.transit(
+                                {
+                                    marginLeft : taskLi.outerWidth() + 20,
+                                    opacity : 0
+                                },
+                                "slow",
+                                function() {
+                                    console.log("Swiped Right");
+                                }
+                    ).transit(
+                                {
+                                    height : 0,
+                                    padding : 0,
+                                    margin : 0
+                                //Reason for geany effect.
+                                },
+                                "slow",
+                                function() {
+                                    debugger;
+                                    taskLi.remove();
+                                    deleteTask(taskLi.find("[TaskID]").attr('TaskId'));
+                                    var nextTask = taskLi.next();
+                                    nextTask.transit(
+                                                    {
+                                                        top : 0
+                                                    },
+                                                    "fast");
+                                    console.log('Remove');
+                                    taskLi.remove();
+                                }
+                    );
+            }
+
+            function beforeScrollEnd() {
+
+                //If the app is showing the top item in the todolist and the user is has scrolled morethan 100px
+                if( window.verticalSlideDist <= 100  || $('div#scroller ul').css('transform').indexOf('-')!=-1 ) 
+                    return;
+
+                /**
+                 * Code for the text-box, to enter the Task-name and the description.
+                 */
+                var newTaskId = parseInt($('li.task span:first').attr('taskid')) - 1;
+                var newTakHTML = '<li class="task added"><span class="tiles"  TaskId="'+newTaskId+'">'
+                        + '<div class="Name">New Task</div>'
+                        + '<div class="Description">Description</div>'
+                        + '<div class="taskTime"></div>'
+                        + '</span></li>';
+
+                // Add a new tile to the List, and bind an event listener for the slide-to-delete event.
+                $("div#scroller ul").prepend(newTakHTML);
+                setTimeout(function() {
+                                $('li.animated.bounceIn').removeClass(
+                                        'animated bounceIn');
+                            }, 1000);
+
+                $('div#scroller ul li.added').addClass(
+                                        'animated bounceIn');
+                                $('div#scroller ul li.added').removeClass(
+                                        'added');
+                                // iScroller.refresh();
+
+                $("ul li:first").on( "swiperight", function(e){ 
+                                            console.log('Swiped Right.')
+                                            SwipedRight(e);
+                                            // $(e.target).remove();
+                                        } );
+                $("ul li:first").on( "dblclick",OpenTaskForEdit);/* function(e){ 
+                                            console.log('Double tapped.')
+                                            OpenTaskForEdit(e);
+                                            // $(e.target).remove();
+                                        } );*/
+                
+                console.log('ScrollEnd')
+            }
+
+	        $(function(){
+			    var footerHeight = $('[data-role="footer"]').outerHeight(true),
+			        headerHeight = $('[data-role="header"]').outerHeight(true),
+			        padding = 15*2; //ui-content padding
+			    
+			   	$('#wrapper, #scroller').height( $(window).innerHeight() - headerHeight - padding );
+			   
+			    var iScroller = new IScroll('#scroller');//, {bounce:true, onBeforeScrollEnd: beforeScrollEnd});
+
+                iScroller.on('beforeScrollEnd', beforeScrollEnd )
+
+			    $("ul li").on( "swipe", function(e){ 
+			    							console.log('Swiped.')
+			    						} );
+			    $("ul li").on( "swiperight", function(e){ 
+			    							console.log('Swiped Right.')
+                                            $(e.target).css("background-color", 'Green')
+                                            SwipedRight(e);
+                                            // $(e.target).remove();
+			    						} );
+			    $("ul li").on( "swipeleft", function(e){ 
+			    							console.log('Swiped left.')
+			    						} );
+			});
+        </script>
+    </head>
+    <body>
+        
+        <div data-role="page">
+        
+            <div id="header" data-role="header">
+                Foo
+            </div>
+            
+            <div data-role="content">
+                <div id="wrapper">
+                    <div id="scroller" class="iscroll-scroller">
+                        
+                        <ul>
+                            <li class="task" style="height:350px;"><span class="tiles" TaskId='0'>
+                                    <div class="Name">
+                                        Tutorial
+                                    </div>
+                                    <div class="Description">This is the description of Task 1
+                                        and its overflowing.</div>
+                            </span></li>
+                            <li style="list-style-type: none;"></li>
+
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+        
+            <!-- <div data-role="footer" data-position="fixed">
+                <h4>Page Footer</h4>
+            </div> -->
+        
+        </div>
+
+
+            <!-- Binding Event-handlers for "Ok" and "Cancel" button in pop-up window. -->
+    <script type="text/javascript">
+    $(function(){
+        function preventPropogation(e){
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        $('#test-popup textArea#Description, #test-popup input#Name').on('click', preventPropogation);
+        
+        /* Update the List view, hide the Edit-task view and display the List
+         * Also add/update the task in the DB.
+         */
+        $('#Ok').on('click', function(){
+            $('#wrapper').css('display', 'block');
+            $('#test-popup').css('display', 'none');
+            
+            var taskId = $("#test-popup input#TaskId").val();
+            var taskName = $("#test-popup input#Name").val();
+            var taskDescription = $("#test-popup textArea#Description").val();
+            var taskDateArray = $("#test-popup input#datepicker").val().split('-');
+            var taskTimeArray = $("#test-popup input#timepicker").val().split(':');
+
+            var taskObj =   {
+                        "id"    : parseInt(taskId),
+                        "name"  : taskName, 
+                        "description" : taskDescription,
+                        "taskTime" : new Date(taskDateArray[0], 
+                                                taskDateArray[1],
+                                                taskDateArray[2],
+                                                taskTimeArray[0],
+                                                taskTimeArray[1])
+                    };
+
+            debugger;
+            var taskInTheList = "span[TaskId^='"+ taskId +"']";
+            addOrUpdateTask( taskId, taskObj );
+            console.log(taskObj);
+
+            $(taskInTheList).find(".Name").html( taskName );
+            $(taskInTheList).find(".Description").html( taskDescription );
+            $(taskInTheList).find(".taskTime").html( taskObj.taskTime );
+            /* Animating the updated task, in the List View */
+            $(taskInTheList).parent().addClass('animated tada');
+            $(taskInTheList).parent().find('.Description').attr('height','400px');
+            $(taskInTheList).parent().addClass('animated tada');
+            
+            /* Removing the Animation-CSS from the updated task, in the List View */
+            setTimeout( function(){
+                $('li.task').removeClass('animated tada');
+            }, 1000);
+        })
+        
+        $('#Cancel').on( 'click', function(e){
+            debugger;
+            $('#wrapper').css('display', 'block');
+            $('#test-popup').css('display', 'none');
+        });
+    })
+    </script>
+    <div id="test-popup" class="white-popup mfp-with-anim mfp-hide task" style="display: none;">
+        <input type="text" value="Name" id="Name" style="width: 80%"/><br>
+        <textarea rows="5" cols="" value="Description..." id="Description" style="width: 80%"></textarea><br>
+        <input type="hidden" id='TaskId' value="">
+        <input id="datepicker" type="date" ><br>
+        <input id="timepicker" type="time"><br>
+        <!-- <button onclick="document.getElementById('datepicker').focus()" style="display:none;visibility:hidden;opacity:0;"></button><br>
+        <button onclick="document.getElementById('timepicker').focus()" style="display:none;visibility:hidden;opacity:0;"></button> -->
+        <button id='Ok'>Ok</button>
+        <button id='Cancel'>Cancel</button>
+    </div>
+
+        
+    </body>
+        
+</html>

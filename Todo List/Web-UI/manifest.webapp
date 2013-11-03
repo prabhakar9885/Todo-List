@@ -1,0 +1,20 @@
+{
+  "version": "0.0.1",
+  "name": "Todo demo",
+  "description": "Demo to show how mozNotification work",
+  "launch_path": "/View/Demo.html",
+  "icons": {
+    "16": "/img/icons/mortar-16.png",
+    "48": "/img/icons/mortar-48.png",
+    "128": "/img/icons/mortar-128.png"
+  },
+  "developer": {
+    "name": "Ricardo Panaggio",
+    "url": "https://gitorious.org/~panaggio"
+  },
+  "installs_allowed_from": ["*"],
+  "appcache_path": "/cache.manifest",
+  "permissions": {
+    "desktop-notification":{}
+  }
+}

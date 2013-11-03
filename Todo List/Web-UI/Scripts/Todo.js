@@ -23,10 +23,13 @@ while ($(tile).outerHeight() > $(tile).height()) {
  */
 
 $(function() {	
+
+setTimeout(function(){
 	/**
 	 * Code used for binding the task list, to the swiping(left, right) gestures.
 	 */
 	var cols = document.querySelectorAll('li.task span.tiles');
+	debugger;
 	[].forEach.call(cols, function(col) {
 		//col.addEventListener('touchstart', handleDragStart, false);
 		//col.addEventListener('touchend', handleDragEnd, false);
@@ -74,6 +77,7 @@ $(function() {
 												"slow",
 												function() {
 													debugger;
+													deleteTask(takLi.find("[TaskID]").attr('TaskId'));
 													var nextTask = takLi.next();
 													nextTask.transit({ top: 0}, "fast");
 													takLi.remove();
@@ -108,16 +112,27 @@ $(function() {
 		$(col).on( 'dblclick', function(e){
 			debugger;
 
-			if( window.verticalSlideDist >5)
+			/*if( window.verticalSlideDist >5){
+				window.verticalSlideDist = 0;
 				return;
-			
+			}*/
 			$('#wrapper').css('display', 'none');
 			$('#test-popup').css('display', 'block');
 			console.log($(this).find('.Name').html().trim());
 			console.log($(this).find('.Description').html().trim());
+			console.log( $(this).attr('TaskId') );
 			debugger;
 			$('#test-popup textArea#Description').val( $(this).find('.Description').html().trim() );
 			$('#test-popup input#Name').val( $(this).find('.Name').html().trim() );
+			var dateTime = new Date($(this).find('.taskTime').html().trim())
+			var date =  dateTime.getFullYear() +"-"+
+						((dateTime.getMonth() + 1)<10? ('0'+(dateTime.getMonth() + 1)): (dateTime.getMonth() + 1) )+"-"+
+						((dateTime.getDate() < 10 )? ('0'+dateTime.getDate()) : dateTime.getDate());
+			var time = ((dateTime.getHours()<10)?('0'+dateTime.getHours()): dateTime.getHours() )+":"+
+					   ((dateTime.getMinutes()<10)?('0'+dateTime.getMinutes()): dateTime.getMinutes() )+":"+
+					   ((dateTime.getSeconds()<10)?('0'+dateTime.getSeconds()): dateTime.getSeconds() );
+			$('#test-popup input#datepicker').val( date );
+			$('#test-popup input#timepicker').val( time );
 			debugger;
 			$('#test-popup #TaskId').val( $(this).attr('TaskId'));
 //			$(e.target).magnificPopup({
@@ -127,7 +142,7 @@ $(function() {
 //				  },
 //				  closeBtnInside: true
 //				});
-			});
+		});
 		
 	})
 	
@@ -159,7 +174,8 @@ $(function() {
 			$('li.task').removeClass('animated tada');
 		}, 1000);
 	})*/
-});
+}, 150);
+ });
 
 //var cols = document.querySelectorAll('li.tiles');
 //[].forEach.call(cols, function(col) {

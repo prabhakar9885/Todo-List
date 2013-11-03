@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html manifest>
 <html>
 <head>
 <meta charset="utf-8">
@@ -9,14 +9,16 @@
 <title>iScroll demo: bounce easing</title>
 <link rel="stylesheet" type="text/css" href="../Styles/Demo.css" />
 <link rel="stylesheet" type="text/css" href="../Styles/animate.css" />
-<link rel="stylesheet" type="text/css"
-	href="../Syyles/magnific-popup.css" />
+<!-- <link rel="stylesheet" type="text/css"
+	href="../Styles/magnific-popup.css" /> -->
 <!-- <link rel="stylesheet" type="text/css" href="../Styles/Todo.css" /> -->
 <script type="text/javascript" src="../Scripts/jquery-1.8.js"></script>
+<!-- <script type="text/javascript" src="../Scripts/jqueryMobile1.3.2.js"></script> -->
+<script type="text/javascript" src="../Scripts/Todo.js"></script>
 <script type="text/javascript" src="../Scripts/jquery.transit.js"></script>
 <script type="text/javascript" src="../Scripts/jquery.wipetouch.js"></script>
 <script type="text/javascript" src="../Scripts/iScroll5/iscroll.js"></script>
-<script type="text/javascript" src="../Scripts/Todo.js"></script>
+<script type="text/javascript" src="../Scripts/DBLogic.js"></script>
 <script type="text/javascript"
 	src="../Scripts/Magnific-popup/jquery.magnific-popup.js"></script>
 <style type="text/css">
@@ -49,6 +51,14 @@ li.added {
 	window.verticalSwipeDist = 0;
 
 	function loaded() {
+        
+        /* Wait for sometime, so that the tasks stored in the 
+           DB will get loaded into the string 'tasksList'*/
+        setTimeout(function () {
+	        var scrollableList =$('div#scroller ul');
+	        scrollableList.prepend(tasksList);
+        }, 100);
+
 		myScroll = new IScroll('#wrapper', {
 			bounceEasing : 'elastic',
 			bounceTime : 1200
@@ -85,24 +95,44 @@ li.added {
 								/**
 								 * Code for the text-box, to enter the Task-name and the description.
 								 */
-								var newTakHTML = '<li class="task added"><span class="tiles">'
+								var newTaskId = parseInt($('li.task span:first').attr('taskid')) - 1;
+								var newTakHTML = '<li class="task added"><span class="tiles"  TaskId="'+newTaskId+'">'
 										+ '<div class="Name">New Task</div>'
 										+ '<div class="Description">Description</div>'
+										+ '<div class="taskTime"></div>'
 										+ '</span></li>';
 
 								// Add a new tile to the List, and bind an event listener for the slide-to-delete event.
 								$("div#scroller ul").prepend(newTakHTML);
-								$('li.task:first').dblclick(
-										function() {
-											console.log("dblClick");
-											$(this).removeClass(
-													'animated bounceIn');
-											$(this).addClass('animated tada');
-											setTimeout(function() {
-												$('li.task').removeClass(
-														'animated tada');
+								setTimeout(function() {
+												$('li.animated.bounceIn').removeClass(
+														'animated bounceIn');
 											}, 1000);
-										})
+								$('li.task:first').on('dblclick',
+										function() {
+											/*if( window.verticalSlideDist >5){
+												window.verticalSlideDist = 0;
+												return;
+											}*/
+											debugger;
+											$('#wrapper').css('display', 'none');
+											$('#test-popup').css('display', 'block');
+											console.log($(this).find('.Name').html().trim());
+											console.log($(this).find('.Description').html().trim());
+											console.log( $(this).find('span').attr('TaskId'));
+											debugger;
+											$('#test-popup textArea#Description').val( $(this).find('.Description').html().trim() );
+											$('#test-popup input#Name').val( $(this).find('.Name').html().trim() );
+											debugger;
+											$('#test-popup #TaskId').val( $(this).find('span').attr('TaskId'));
+											var dateTime = new Date($(this).find('.taskTime').html().trim())
+											var date =  dateTime.getFullYear() +"-"+
+														((dateTime.getMonth() + 1)<10? ('0'+(dateTime.getMonth() + 1)): (dateTime.getMonth() + 1) )+"-"+
+														((dateTime.getDate() < 10 )? ('0'+dateTime.getDate()) : dateTime.getDate());
+											var time = ((dateTime.getHours()<10)?('0'+dateTime.getHours()): dateTime.getHours() )+":"+
+													   ((dateTime.getMinutes()<10)?('0'+dateTime.getMinutes()): dateTime.getMinutes() )+":"+
+													   ((dateTime.getSeconds()<10)?('0'+dateTime.getSeconds()): dateTime.getSeconds() );
+										});
 								$("div#scroller ul li:first")
 										.wipetouch(
 												{
@@ -183,10 +213,9 @@ li.added {
 																		"slow",
 																		function() {
 																			debugger;
-																			var nextTask = takLi
-																					.next();
-																			nextTask
-																					.transit(
+																			deleteTask(takLi.find("[TaskID]").attr('TaskId'));
+																			var nextTask = takLi.next();
+																			nextTask.transit(
 																							{
 																								top : 0
 																							},
@@ -227,62 +256,19 @@ li.added {
 	<div id="wrapper">
 		<div id="scroller">
 			<ul>
-				<li class="task"><span class="tiles" TaskId='0'>
-						<div class="Name">Task 1</div>
-						<div class="Description">This is the description of Task 1
-							and its overflowing.</div>
-				</span></li>
-				<li class="task"><span class="tiles" TaskId='1'>
-						<div class="Name">Task A</div>
-						<div class="Description">This is the description of Task 1
-							and its overflowing.</div>
-				</span></li>
-				<li class="task"><span class="tiles" TaskId='2'>
-						<div class="Name">Task A</div>
-						<div class="Description">This is the description of Task 1
-							and its overflowing.</div>
-				</span></li>
-				<li class="task"><span class="tiles" TaskId='3'>
-						<div class="Name">Task A</div>
-						<div class="Description">This is the description of Task 1
-							and its overflowing.</div>
-				</span></li>
-				<li class="task"><span class="tiles" TaskId='4'>
-						<div class="Name">Task A</div>
-						<div class="Description">This is the description of Task 1
-							and its overflowing.</div>
-				</span></li>
-				<li class="task"><span class="tiles" TaskId='5'>
-						<div class="Name">Task A</div>
-						<div class="Description">This is the description of Task 1
-							and its overflowing.</div>
-				</span></li>
-				<li class="task"><span class="tiles" TaskId='6'>
-						<div class="Name">Task A</div>
-						<div class="Description">This is the description of Task 1
-							and its overflowing.</div>
-				</span></li>
-				<li class="task"><span class="tiles" TaskId='7'>
-						<div class="Name">Task A</div>
-						<div class="Description">This is the description of Task 1
-							and its overflowing.</div>
-				</span></li>
-				<li class="task"><span class="tiles" TaskId='8'>
-						<div class="Name">Task A</div>
-						<div class="Description">This is the description of Task 1
-							and its overflowing.</div>
-				</span></li>
-				<li class="task"><span class="tiles" TaskId='9'>
+				<li class="task" style="height:350px;"><span class="tiles" TaskId='0'>
 						<div class="Name">
-							<a href="#test-popup" data-rel="popup">nnnn</a>Task A
+							Tutorial
 						</div>
 						<div class="Description">This is the description of Task 1
 							and its overflowing.</div>
 				</span></li>
+				<li style="list-style-type: none;"></li>
 
 			</ul>
 		</div>
 	</div>
+	<!-- Binding Event-handlers for "Ok" and "Cancel" button in pop-up window. -->
 	<script type="text/javascript">
 	$(function(){
 		function preventPropogation(e){
@@ -291,16 +277,38 @@ li.added {
 		}
 		$('#test-popup textArea#Description, #test-popup input#Name').on('click', preventPropogation);
 		
-		/* Update the List view, hide the Edit-task view and display the List*/
+		/* Update the List view, hide the Edit-task view and display the List
+		 * Also add/update the task in the DB.
+		 */
 		$('#Ok').on('click', function(){
 			$('#wrapper').css('display', 'block');
 			$('#test-popup').css('display', 'none');
 			
-			var taskInTheList = "span[TaskId^='"+ $("#test-popup input#TaskId").val() +"']";
+			var taskId = $("#test-popup input#TaskId").val();
+			var taskName = $("#test-popup input#Name").val();
+			var taskDescription = $("#test-popup textArea#Description").val();
+			var taskDateArray = $("#test-popup input#datepicker").val().split('-');
+			var taskTimeArray = $("#test-popup input#timepicker").val().split(':');
+
+			var taskObj = 	{
+						"id"	: parseInt(taskId),
+						"name" 	: taskName, 
+						"description" : taskDescription,
+						"taskTime" : new Date(taskDateArray[0], 
+												taskDateArray[1],
+												taskDateArray[2],
+												taskTimeArray[0],
+												taskTimeArray[1])
+					};
+
 			debugger;
-			$(taskInTheList).find(".Name").html($("#test-popup input#Name").val());
-			$(taskInTheList).find(".Description").html($("#test-popup textArea#Description").val());
-			
+			var taskInTheList = "span[TaskId^='"+ taskId +"']";
+			addOrUpdateTask( taskId, taskObj );
+			console.log(taskObj);
+
+			$(taskInTheList).find(".Name").html( taskName );
+			$(taskInTheList).find(".Description").html( taskDescription );
+			$(taskInTheList).find(".taskTime").html( taskObj.taskTime );
 			/* Animating the updated task, in the List View */
 			$(taskInTheList).parent().addClass('animated tada');
 			$(taskInTheList).parent().find('.Description').attr('height','400px');
@@ -323,6 +331,10 @@ li.added {
 		<input type="text" value="Name" id="Name" style="width: 80%"/><br>
 		<textarea rows="5" cols="" value="Description..." id="Description" style="width: 80%"></textarea><br>
 		<input type="hidden" id='TaskId' value="">
+		<input id="datepicker" type="date" ><br>
+		<input id="timepicker" type="time"><br>
+		<!-- <button onclick="document.getElementById('datepicker').focus()" style="display:none;visibility:hidden;opacity:0;"></button><br>
+		<button onclick="document.getElementById('timepicker').focus()" style="display:none;visibility:hidden;opacity:0;"></button> -->
 		<button id='Ok'>Ok</button>
 		<button id='Cancel'>Cancel</button>
 	</div>
