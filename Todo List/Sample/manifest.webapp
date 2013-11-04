@@ -4,7 +4,7 @@
   "description": "Demo to show how mozNotification work",
   "launch_path": "/Sample.html",
   "developer": {
-    "name": "Ricardo Panaggio",
+    "name": "Prabhakar Bikkaneti",
     "url": "https://gitorious.org/~panaggio"
   },
   "installs_allowed_from": ["*"],

@@ -4,11 +4,11 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">      
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <title>Foo</title>
-        <link rel="stylesheet" href="./jquery.mobile-1.2.0.min.css" />
-        <link rel="stylesheet" type="text/css" href="Styles/Sample.css">
-        <link rel="stylesheet" type="text/css" href="Styles/animate.css" />
-        <link rel="stylesheet" type="text/css" href="./magnific-popup.css" />
+        <title>Todo List</title>
+        <link rel="stylesheet" href="../Styles/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" type="text/css" href="../Styles/Sample.css">
+        <link rel="stylesheet" type="text/css" href="../Styles/animate.css" />
+        <!-- <link rel="stylesheet" type="text/css" href="../Styles/magnific-popup.css" /> -->
 
         <style type="text/css">
             li.added {
@@ -18,11 +18,11 @@
             }
         </style>
 
-        <script src="./jquery-1.8.2.min.js"></script>
-        <script type="text/javascript" src="./jquery.transit.js"></script>
-        <script src="./jquery.mobile-1.2.0.min.js"></script>
-        <script src="./iscroll56.js"></script>
-        <script src="./DBLogic.js"></script>
+        <script src="../Scripts/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="../Scripts/jquery.transit.js"></script>
+        <script src="../Scripts/jquery.mobile-1.2.0.min.js"></script>
+        <script src="../Scripts/iscroll56.js"></script>
+        <script src="../Scripts/DBLogic.js"></script>
         <script type="text/javascript">
 
             var iScroller;
@@ -174,7 +174,7 @@
 
                 iScroller.on('beforeScrollEnd', beforeScrollEnd )
 
-			    $("ul li").on( "swipe", function(e){ 
+			    /* $("ul li").on( "swipe", function(e){ 
 			    							console.log('Swiped.')
 			    						} );
 			    $("ul li").on( "swiperight", function(e){ 
@@ -185,14 +185,14 @@
 			    						} );
 			    $("ul li").on( "swipeleft", function(e){ 
 			    							console.log('Swiped left.')
-			    						} );
+			    						} ); */
 
                 /* Wait for sometime, so that the tasks stored in the 
                    DB will get loaded into the string 'tasksList' */
                 setTimeout(function () {
                     var scrollableList =$('div#scroller ul');
                     scrollableList.prepend(tasksList);
-                    $("ul li").on( "swiperight", SwipedRight )
+                    $("ul li[class!='dummyLineForScrolling']:not(:last)").on( "swiperight", SwipedRight )
                               .on( "dblclick",OpenTaskForEdit);
                 }, 100);
 			});
@@ -218,7 +218,7 @@
                                     <div class="Description">This is the description of Task 1
                                         and its overflowing.</div>
                             </span></li>
-                            <li style="list-style-type: none;"></li>
+                            <li class="dummyLineForScrolling" style="list-style-type: none;"></li>
 
                         </ul>
                         
