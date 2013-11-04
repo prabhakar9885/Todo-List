@@ -108,11 +108,19 @@
                     );
             }
 
+            var mostRecentPositionOfFirstTask="matrix(1, 0, 0, 1, 0, 0)";
             function beforeScrollEnd() {
 
+                debugger;
+
                 //If the app is showing the top item in the todolist and the user is has scrolled morethan 100px
-                if( window.verticalSlideDist <= 100  || $('div#scroller ul').css('transform').indexOf('-')!=-1 ) 
+                if( (window.verticalSlideDist <= 180  /*||  $('div#scroller ul').css('transform').indexOf('-')!=-1*/ ) /*&&
+                            mostRecentPositionOfFirstTask.indexOf('matrix(1, 0, 0, 1, 0, 0)') != -1*/ ) {
+                    mostRecentPositionOfFirstTask = $('div#scroller ul').css('transform');
                     return;
+                }
+
+                mostRecentPositionOfFirstTask = $('div#scroller ul').css('transform');
 
                 /**
                  * Code for the text-box, to enter the Task-name and the description.
@@ -156,9 +164,13 @@
 			        headerHeight = $('[data-role="header"]').outerHeight(true),
 			        padding = 15*2; //ui-content padding
 			    
+                debugger;
 			   	$('#wrapper, #scroller').height( $(window).innerHeight() - headerHeight - padding );
-			   
-			    var iScroller = new IScroll('#scroller');//, {bounce:true, onBeforeScrollEnd: beforeScrollEnd});
+			    
+			    var iScroller = new IScroll('#scroller'/*,{
+                                        bounceEasing : 'elastic',
+                                        bounceTime : 1200
+                                    }*/);
 
                 iScroller.on('beforeScrollEnd', beforeScrollEnd )
 
@@ -174,6 +186,15 @@
 			    $("ul li").on( "swipeleft", function(e){ 
 			    							console.log('Swiped left.')
 			    						} );
+
+                /* Wait for sometime, so that the tasks stored in the 
+                   DB will get loaded into the string 'tasksList' */
+                setTimeout(function () {
+                    var scrollableList =$('div#scroller ul');
+                    scrollableList.prepend(tasksList);
+                    $("ul li").on( "swiperight", SwipedRight )
+                              .on( "dblclick",OpenTaskForEdit);
+                }, 100);
 			});
         </script>
     </head>

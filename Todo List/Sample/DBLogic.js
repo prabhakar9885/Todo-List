@@ -11,7 +11,7 @@ $(function() {
         return;
     }
 
-    var openRequest = indexedDB.open("TasksDB", 12);
+    var openRequest = indexedDB.open("TasksDB", 1);
 
     openRequest.onupgradeneeded = function(e){
     	console.log('upgrading'+e);
@@ -20,9 +20,12 @@ $(function() {
 
     	debugger;
     	if(!thisDB.objectStoreNames.contains("TasksDB")) {
+            try{
                 thisDB.deleteObjectStore("TasksDB");
-                thisDB.createObjectStore("TasksDB" ,{keyPath:"id"} );
-                // thisDB.createIndex('IndexOnIdForSortingInDesc', ['id'], {unique: false});
+            }catch(e){
+            }
+            thisDB.createObjectStore("TasksDB" ,{keyPath:"id"} );
+            // thisDB.createIndex('IndexOnIdForSortingInDesc', ['id'], {unique: false});
         }
     }
 
