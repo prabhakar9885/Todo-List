@@ -107,21 +107,32 @@
                                 }
                     );
             }
+            
+            /* 
+             * Record the position of the 'ul' before starting the scroll.  
+             */
+            var firstTileIsAtTheTop = false;
+            function beforeScrollStart(){
+            	var yCoordinateOfCssTrnsform = parseInt($('ul').css('transform').split(',')[5].trim().split(')')[0]);
+            	if( yCoordinateOfCssTrnsform >= -29 && yCoordinateOfCssTrnsform <= 0 )
+            		firstTileIsAtTheTop = true;
+            	else
+            		firstTileIsAtTheTop = false;
+            }
 
             var mostRecentPositionOfFirstTask="matrix(1, 0, 0, 1, 0, 0)";
             function beforeScrollEnd() {
 
                 debugger;
-
+                
                 //If the app is showing the top item in the todolist and the user is has scrolled morethan 100px
-                if( (window.verticalSlideDist <= 180  /*||  $('div#scroller ul').css('transform').indexOf('-')!=-1*/ ) /*&&
-                            mostRecentPositionOfFirstTask.indexOf('matrix(1, 0, 0, 1, 0, 0)') != -1*/ ) {
+                if( firstTileIsAtTheTop && window.verticalSlideDist <= 180 ) {
                     mostRecentPositionOfFirstTask = $('div#scroller ul').css('transform');
                     return;
                 }
 
                 mostRecentPositionOfFirstTask = $('div#scroller ul').css('transform');
-
+                
                 /**
                  * Code for the text-box, to enter the Task-name and the description.
                  */
@@ -144,7 +155,7 @@
                                 $('div#scroller ul li.added').removeClass(
                                         'added');
                                 // iScroller.refresh();
-
+                                
                 $("ul li:first").on( "swiperight", function(e){ 
                                             console.log('Swiped Right.')
                                             SwipedRight(e);
@@ -157,6 +168,15 @@
                                         } );*/
                 
                 console.log('ScrollEnd')
+                
+
+                if(refreshInProgress){
+                	refreshInProgress = false;
+			    	return;
+                }
+                refreshInProgress = true;
+                this.refresh();
+             
             }
 
 	        $(function(){
@@ -172,8 +192,9 @@
                                         bounceTime : 1200
                                     }*/);
 
-                iScroller.on('beforeScrollEnd', beforeScrollEnd )
-
+                iScroller.on('beforeScrollEnd', beforeScrollEnd );
+                iScroller.on('beforeScrollStart', beforeScrollStart );
+                
 			    /* $("ul li").on( "swipe", function(e){ 
 			    							console.log('Swiped.')
 			    						} );
@@ -189,6 +210,8 @@
 
                 /* Wait for sometime, so that the tasks stored in the 
                    DB will get loaded into the string 'tasksList' */
+                   
+                this.refresh();
                 setTimeout(function () {
                     var scrollableList =$('div#scroller ul');
                     scrollableList.prepend(tasksList);
@@ -196,6 +219,8 @@
                               .on( "dblclick",OpenTaskForEdit);
                 }, 100);
 			});
+	        
+	        var refreshInProgress = false;
         </script>
     </head>
     <body>
@@ -207,7 +232,7 @@
             </div>
             
             <div data-role="content">
-                <div id="wrapper">
+                <span id="wrapper">
                     <div id="scroller" class="iscroll-scroller">
                         
                         <ul>
@@ -223,7 +248,7 @@
                         </ul>
                         
                     </div>
-                </div>
+                </span>
             </div>
         
             <!-- <div data-role="footer" data-position="fixed">

@@ -7,6 +7,9 @@ var rAF = window.requestAnimationFrame	||
 	window.msRequestAnimationFrame		||
 	function (callback) { window.setTimeout(callback, 1000 / 60); };
 
+var invokeBeforeScrollEndEvent = true;
+var loadingForTheFirstTime = true;
+
 var utils = (function () {
 	var me = {};
 
@@ -633,7 +636,15 @@ IScroll.prototype = {
 
 		//Add code totrigger custom event
 		debugger;
-		this._execEvent('beforeScrollEnd');
+		if(invokeBeforeScrollEndEvent)
+			this._execEvent('beforeScrollEnd');
+		else
+			invokeBeforeScrollEndEvent = true;
+		
+		if( loadingForTheFirstTime ){
+			loadingForTheFirstTime = false;
+			this._execEvent('beforeScrollEnd');
+		}
 
 		this.scrollTo(x, y, time, this.options.bounceEasing);
 
@@ -682,7 +693,12 @@ IScroll.prototype = {
 		this.directionY = 0;
 
 		this.wrapperOffset = utils.offset(this.wrapper);
-
+		
+		/* If loading for the first time, allow the 'BeforeScrollEnd' event when the control is passing 
+		 * from this.refresh() to this.resetPosition().
+		 */
+		invokeBeforeScrollEndEvent = false;			
+		
 		this._execEvent('refresh');
 
 		this.resetPosition();

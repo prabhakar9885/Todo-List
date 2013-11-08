@@ -2,13 +2,12 @@
   "version": "0.0.1",
   "name": "Todo demo",
   "description": "Demo to show how mozNotification work",
-  "launch_path": "/Sample.html",
+  "launch_path": "/Views/Sample.html",
   "developer": {
     "name": "Prabhakar Bikkaneti",
     "url": "https://gitorious.org/~panaggio"
   },
   "installs_allowed_from": ["*"],
-  "appcache_path": "/cache.manifest",
   "permissions": {
     "desktop-notification":{}
   }
