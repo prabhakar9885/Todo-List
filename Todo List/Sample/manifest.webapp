@@ -1,7 +1,7 @@
 {
   "version": "0.0.1",
   "name": "Todo demo",
-  "description": "Demo to show how mozNotification work",
+  "description": "Keep track of all the tasks that you need to do.",
   "launch_path": "/Views/Sample.html",
   "developer": {
     "name": "Prabhakar Bikkaneti",
