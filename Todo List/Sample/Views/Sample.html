@@ -27,11 +27,78 @@
 
             var iScroller;
 
+
+
+
+
+            function OkButtonClicked(){
+                $('#wrapper').css('display', 'block');
+                $('#test-popup').css('display', 'none');
+                
+                var taskId = $("#test-popup input#TaskId").val();
+                var taskName = $("#test-popup input#Name").val();
+                var taskDescription = $("#test-popup textArea#Description").val();
+                var taskDateArray = $("#test-popup input#datepicker").val().split('-');
+                var taskTimeArray = $("#test-popup input#timepicker").val().split(':');
+
+                var taskObj =   {
+                            "id"    : parseInt(taskId),
+                            "name"  : taskName, 
+                            "description" : taskDescription,
+                            "taskTime" : new Date(taskDateArray[0], 
+                                                    taskDateArray[1],
+                                                    taskDateArray[2],
+                                                    taskTimeArray[0],
+                                                    taskTimeArray[1])
+                        };
+
+                debugger;
+                var taskInTheList = "span[TaskId^='"+ taskId +"']";
+                addOrUpdateTask( taskId, taskObj );
+                console.log(taskObj);
+
+                $(taskInTheList).find(".Name").html( taskName );
+                $(taskInTheList).find(".Description").html( taskDescription );
+                $(taskInTheList).find(".taskTime").html( taskObj.taskTime );
+                /* Animating the updated task, in the List View */
+                $(taskInTheList).parent().addClass('animated tada');
+                $(taskInTheList).parent().find('.Description').attr('height','400px');
+                $(taskInTheList).parent().addClass('animated tada');
+                
+                /* Removing the Animation-CSS from the updated task, in the List View */
+                setTimeout( function(){
+                    $('li.task').removeClass('animated tada');
+                }, 1000);
+            }
+
+
+        
+            function CancelButtonClicked(e){
+                debugger;
+                $('#wrapper').css('display', 'block');
+                $('#test-popup').css('display', 'none');
+            }
+
+
+
+
+
+
+
+
+
+
+
         	function OpenTaskForEdit(e) {
                 /*if( window.verticalSlideDist >5){
                     window.verticalSlideDist = 0;
                     return;
                 }*/
+
+                $('#Ok').on('click', OkButtonClicked)
+                $('#Cancel').on( 'click', CancelButtonClicked );
+
+
                 debugger;
                 $('#wrapper').css('display', 'none');
                 $('#test-popup').css('display', 'block');
@@ -211,13 +278,14 @@
                 /* Wait for sometime, so that the tasks stored in the 
                    DB will get loaded into the string 'tasksList' */
                    
-                this.refresh();
                 setTimeout(function () {
                     var scrollableList =$('div#scroller ul');
                     scrollableList.prepend(tasksList);
                     $("ul li[class!='dummyLineForScrolling']:not(:last)").on( "swiperight", SwipedRight )
                               .on( "dblclick",OpenTaskForEdit);
                 }, 100);
+
+                this.refresh();
 			});
 	        
 	        var refreshInProgress = false;
@@ -256,6 +324,20 @@
             </div> -->
         
         </div>
+
+
+
+    <div id="test-popup" class="white-popup mfp-with-anim mfp-hide task" style="display: none;padding-top: 50px;">
+        <input type="text" value="Name" id="Name" style="width: 80%;"/><br>
+        <textarea rows="5" cols="" value="Description..." id="Description" style="width: 80%"></textarea><br>
+        <input type="hidden" id='TaskId' value="">
+        <input id="datepicker" type="date" ><br>
+        <input id="timepicker" type="time" ><br>
+        <!-- <button onclick="document.getElementById('datepicker').focus()" style="display:none;visibility:hidden;opacity:0;"></button><br>
+        <button onclick="document.getElementById('timepicker').focus()" style="display:none;visibility:hidden;opacity:0;"></button> -->
+        <button id='Ok'>Ok</button>
+        <button id='Cancel'>Cancel</button>
+    </div>
 
 
             <!-- Binding Event-handlers for "Ok" and "Cancel" button in pop-up window. -->
@@ -316,19 +398,7 @@
             $('#test-popup').css('display', 'none');
         });
     })
-    </script>
-    <div id="test-popup" class="white-popup mfp-with-anim mfp-hide task" style="display: none;">
-        <input type="text" value="Name" id="Name" style="width: 80%"/><br>
-        <textarea rows="5" cols="" value="Description..." id="Description" style="width: 80%"></textarea><br>
-        <input type="hidden" id='TaskId' value="">
-        <input id="datepicker" type="date" ><br>
-        <input id="timepicker" type="time"><br>
-        <!-- <button onclick="document.getElementById('datepicker').focus()" style="display:none;visibility:hidden;opacity:0;"></button><br>
-        <button onclick="document.getElementById('timepicker').focus()" style="display:none;visibility:hidden;opacity:0;"></button> -->
-        <button id='Ok'>Ok</button>
-        <button id='Cancel'>Cancel</button>
-    </div>
-
+    </script>   
         
     </body>
         
